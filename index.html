@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashwin Premani - ML Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            padding: 20px;
+        }
+
+        .hero-header {
+            text-align: center;
+            margin-bottom: 50px;
+            z-index: 10;
+        }
+
+        .terminal-window {
+            background: #1e1e1e;
+            border-radius: 8px;
+            border: 2px solid #00ff41;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            padding: 20px;
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn.red { background: #ff5f56; }
+        .btn.yellow { background: #ffbd2e; }
+        .btn.green { background: #27ca3f; }
+
+        .terminal-title {
+            margin-left: 20px;
+            color: #00ff41;
+            font-size: 14px;
+        }
+
+        .typing-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #00ff41;
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .glitch {
+            position: relative;
+            color: #fff;
+            font-size: 4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(45deg, #00ff41, #00d4aa, #0095ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff41;
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .skill-category {
+            background: rgba(20, 20, 30, 0.8);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #00ff41;
+        }
+
+        .skill-bar {
+            background: #333;
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff41, #00d4aa);
+            border-radius: 4px;
+            animation: fillBar 2s ease-out;
+        }
+
+        @keyframes fillBar {
+            from { width: 0; }
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-top: 20px solid #00ff41;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover::after {
+            border-left: 40px solid transparent;
+            border-top: 40px solid #00ff41;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(30, 30, 30, 0.8);
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00ff41, #00d4aa);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 255, 65, 0.4);
+        }
+
+        .floating-nav {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot.active,
+        .nav-dot:hover {
+            background: #00ff41;
+            transform: scale(1.2);
+        }
+
+        .nav-dot::after {
+            content: attr(data-section);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+        }
+
+        .code-snippet {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-snippet::before {
+            content: '// Code Preview';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .highlight { color: #00ff41; }
+        .keyword { color: #ff6b9d; }
+        .string { color: #ffd700; }
+
+        @media (max-width: 768px) {
+            .glitch { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .floating-nav { display: none; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg" id="matrix"></canvas>
+    
+    <nav class="floating-nav">
+        <div class="nav-dot active" data-section="Home" onclick="scrollToSection(0)"></div>
+        <div class="nav-dot" data-section="About" onclick="scrollToSection(1)"></div>
+        <div class="nav-dot" data-section="Skills" onclick="scrollToSection(2)"></div>
+        <div class="nav-dot" data-section="Projects" onclick="scrollToSection(3)"></div>
+        <div class="nav-dot" data-section="Experience" onclick="scrollToSection(4)"></div>
+        <div class="nav-dot" data-section="Contact" onclick="scrollToSection(5)"></div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-header">
+            <h1 class="glitch">ASHWIN PREMANI</h1>
+            <p style="font-size: 1.8rem; color: #00d4aa; margin-top: 20px; font-style: italic;">
+                "Premani: Where Algorithms Meet Artistry"
+            </p>
+        </div>
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <div class="btn red"></div>
+                    <div class="btn yellow"></div>
+                    <div class="btn green"></div>
+                </div>
+                <div class="terminal-title">ashwin@ml-architect:~$</div>
+            </div>
+            <div class="typing-text" id="terminal-text">
+                <span>$ python -c "import ashwin; print(ashwin.__class__)"</span><br>
+                <span class="highlight">&lt;class 'ML_Engineer_and_Data_Scientist'&gt;</span><br><br>
+                <span>$ ashwin.get_expertise()</span><br>
+                <span class="string">['Machine Learning', 'Deep Learning', 'Neural Networks', 'Data Science']</span><br><br>
+                <span>$ ashwin.current_mission()</span><br>
+                <span class="highlight">"Transforming data into intelligence, one model at a time"</span><br><br>
+                <span>$ _</span><span class="cursor">|</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">model.describe()</h2>
+            <div class="card">
+                <h3 style="color: #00ff41; margin-bottom: 20px;">#!/usr/bin/python3</h3>
+                <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+                    I'm a Machine Learning enthusiast and Computer Engineering student at Thadomal Shahani Engineering College, passionate about turning raw data into intelligent solutions. My journey revolves around building predictive models, neural networks, and scalable ML systems that solve real-world problems.
+                </p>
+                <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+                    Currently mastering the art of deep learning, where I'm exploring cutting-edge architectures like Vision Transformers, CNNs, and Recurrent Neural Networks. While I've built production-ready ML pipelines and achieved 90%+ accuracy on multiple classification tasks, I'm continuously expanding my neural network expertise to tackle more complex challenges in computer vision and time-series prediction.
+                </p>
+                <p style="font-size: 18px; line-height: 1.8;">
+                    From fraud detection systems processing millions of transactions to healthcare prediction platforms saving lives, I specialize in end-to-end ML solutions—from data preprocessing and feature engineering to model deployment and performance optimization. My backend skills complement my ML expertise, enabling me to build scalable systems that serve intelligent predictions at scale.
+                </p>
+                <div class="code-snippet" style="margin-top: 30px;">
+                    <span class="keyword">class</span> <span class="highlight">AshwinPremani</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">def</span> <span class="highlight">__init__</span>(self):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.role = <span class="string">"ML Engineer & Data Scientist"</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.passion = <span class="string">"Deep Learning & Neural Networks"</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.specialization = [<span class="string">"Predictive Modeling"</span>, <span class="string">"Computer Vision"</span>, <span class="string">"NLP"</span>]<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.ml_accuracy = <span class="highlight">0.90+</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.problems_solved = <span class="highlight">600</span>  # LeetCode DSA<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.graduation = <span class="string">"May 2026"</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="skills">
+        <div class="container">
+            <h2 class="section-title">ML.Pipeline()</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 style="color: #00ff41; margin-bottom: 15px;">🧠 Machine Learning Core</h3>
+                    <div>Python (Advanced)</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 95%"></div></div>
+                    <div>Scikit-learn & Pandas</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 92%"></div></div>
+                    <div>NumPy & SciPy</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 88%"></div></div>
+                    <div>Statistical Analysis</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 style="color: #00d4aa; margin-bottom: 15px;">🔥 Deep Learning</h3>
+                    <div>TensorFlow & Keras</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                    <div>PyTorch (Learning)</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 70%"></div></div>
+                    <div>Neural Networks</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
+                    <div>Computer Vision</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 75%"></div></div>
+                </div>
+
+                <div class="skill-category">
+                    <h3 style="color: #0095ff; margin-bottom: 15px;">📊 Data Engineering</h3>
+                    <div>Feature Engineering</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 90%"></div></div>
+                    <div>Data Preprocessing</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 92%"></div></div>
+                    <div>SQL & NoSQL</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                    <div>Power BI & Visualization</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
+                </div>
+
+                <div class="skill-category">
+                    <h3 style="color: #ff6b9d; margin-bottom: 15px;">🚀 ML Operations</h3>
+                    <div>Model Deployment</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 82%"></div></div>
+                    <div>REST APIs (Flask/FastAPI)</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 88%"></div></div>
+                    <div>Docker & Containerization</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 65%"></div></div>
+                    <div>Model Monitoring</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 70%"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="projects">
+        <div class="container">
+            <h2 class="section-title">Projects.execute()</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3 style="color: #00ff41; margin-bottom: 15px;">🚀 DL-Powered LoS Blockage Prediction</h3>
+                    <p style="margin-bottom: 15px;">Engineered a hybrid deep learning architecture combining Vision Transformers, CNNs, and GRUs to predict signal blockages in 6G networks. Achieved real-time inference capabilities with multimodal data processing.</p>
+                    <div class="code-snippet">
+                        <span class="keyword">def</span> <span class="highlight">predict_blockage</span>(time_series, images):<br>
+                        &nbsp;&nbsp;cnn_features = <span class="highlight">extract_temporal_features</span>(time_series)<br>
+                        &nbsp;&nbsp;vit_features = <span class="highlight">vision_transformer</span>(images)<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> <span class="highlight">gru_predictor</span>(fused_features)
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Tech:</strong> TensorFlow, Python, CNN, ViT, GRU</p>
+                </div>
+
+                <div class="project-card">
+                    <h3 style="color: #00d4aa; margin-bottom: 15px;">💬 Real-Time MERN Chat Application</h3>
+                    <p style="margin-bottom: 15px;">Built a scalable real-time messaging platform with MongoDB data modeling, Express.js API architecture, and Socket.IO WebSocket implementation. Supports thousands of concurrent users.</p>
+                    <div class="code-snippet">
+                        <span class="keyword">const</span> <span class="highlight">chatServer</span> = require(<span class="string">'socket.io'</span>);<br>
+                        io.on(<span class="string">'connection'</span>, (socket) => {<br>
+                        &nbsp;&nbsp;socket.on(<span class="string">'message'</span>, <span class="highlight">broadcastMessage</span>);<br>
+                        });
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Tech:</strong> Node.js, MongoDB, Socket.IO, JWT, React</p>
+                </div>
+
+                <div class="project-card">
+                    <h3 style="color: #0095ff; margin-bottom: 15px;">🏠 Predictive Real Estate Platform</h3>
+                    <p style="margin-bottom: 15px;">Developed a full-stack platform with ML-powered price prediction. Features PostgreSQL database optimization, Next.js API routes, and regression models for accurate property valuation.</p>
+                    <div class="code-snippet">
+                        <span class="keyword">import</span> pandas <span class="keyword">as</span> pd<br>
+                        <span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestRegressor<br>
+                        model = <span class="highlight">train_price_predictor</span>(property_data)
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Tech:</strong> Next.js, PostgreSQL, Scikit-learn, React</p>
+                </div>
+
+                <div class="project-card">
+                    <h3 style="color: #ff6b9d; margin-bottom: 15px;">🏥 Multi-Disease Prediction Platform</h3>
+                    <p style="margin-bottom: 15px;">Created a comprehensive healthcare platform with five distinct ML models achieving 90%+ accuracy. Integrated SVM, Logistic Regression, and Decision Trees in a unified Flask backend.</p>
+                    <div class="code-snippet">
+                        diseases = [<span class="string">'heart'</span>, <span class="string">'diabetes'</span>, <span class="string">'cancer'</span>]<br>
+                        <span class="keyword">for</span> disease <span class="keyword">in</span> diseases:<br>
+                        &nbsp;&nbsp;model = <span class="highlight">train_classifier</span>(disease_data[disease])
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Tech:</strong> Flask, Scikit-learn, React, Python</p>
+                </div>
+
+                <div class="project-card">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">🔒 Credit Card Fraud Detection</h3>
+                    <p style="margin-bottom: 15px;">Developed a high-performance fraud detection system for NeuroNexus Innovations. Implemented advanced feature engineering and model optimization for imbalanced financial datasets.</p>
+                    <div class="code-snippet">
+                        <span class="keyword">def</span> <span class="highlight">detect_fraud</span>(transaction):<br>
+                        &nbsp;&nbsp;features = <span class="highlight">engineer_features</span>(transaction)<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> fraud_model.predict_proba(features)
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Tech:</strong> Python, Scikit-learn, Feature Engineering</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="experience">
+        <div class="container">
+            <h2 class="section-title">Experience.log</h2>
+            <div class="card">
+                <h3 style="color: #00ff41; margin-bottom: 10px;">🔬 AI/ML Researcher</h3>
+                <p style="color: #00d4aa; margin-bottom: 15px;">Lassonde School of Engineering, York University | Jun 2025 – Present</p>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li>Architecting transformer-based predictive models for Dynamic Blockage Prediction in Millimeter Wave Cellular Networks</li>
+                    <li>Conducting rigorous comparative analysis of different neural architectures to optimize performance and reliability</li>
+                    <li>Authoring comprehensive documentation for models and data pipelines to ensure reproducibility</li>
+                    <li>Implementing advanced problem-solving techniques for real-time signal processing applications</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="color: #ff6b9d; margin-bottom: 10px;">🤖 Machine Learning Intern</h3>
+                <p style="color: #00d4aa; margin-bottom: 15px;">NeuroNexus Innovations</p>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li>Analyzed complex, large-scale financial datasets to design and implement credit card fraud detection models</li>
+                    <li>Executed rigorous data preprocessing, feature engineering, and model tuning for optimal precision and recall</li>
+                    <li>Conducted thorough testing and validation to ensure model accuracy in FinTech production environments</li>
+                    <li>Optimized model performance for handling imbalanced datasets with temporal fraud patterns</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="color: #0095ff; margin-bottom: 10px;">👥 Public Relations Officer</h3>
+                <p style="color: #00d4aa; margin-bottom: 15px;">IETE TSEC | Mar 2023 – Present</p>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li>Managing strategic communications and outreach for a 200+ member student technical chapter</li>
+                    <li>Led planning and execution of 5+ technical and community events for over 500 participants</li>
+                    <li>Coordinated with industry professionals for workshops and technical seminars</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="color: #ffd700; margin-bottom: 15px;">🎯 Achievements & Certifications</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #00ff41;">🏆 Competitive Programming</h4>
+                        <p>Solved 600+ Data Structures & Algorithms problems on LeetCode</p>
+                        <p>Demonstrated advanced problem-solving and algorithmic thinking skills</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #00d4aa;">📜 Certifications</h4>
+                        <p>Career Essentials in Generative AI</p>
+                        <p style="color: #888;">Microsoft & LinkedIn Learning</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Connect.establish()</h2>
+            <div class="contact-form">
+                <div class="card">
+                    <h3 style="color: #00ff41; margin-bottom: 30px; text-align: center;">Ready to build something extraordinary?</h3>
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <p style="font-size: 18px; line-height: 1.6;">
+                            Whether you want to discuss AI/ML innovations, backend architecture, or collaborate on cutting-edge projects, I'm always excited to connect with fellow technologists and innovators.
+                        </p>
+                    </div>
+                    
+                    <div class="code-snippet">
+                        <span class="keyword">const</span> <span class="highlight">ashwin</span> = {<br>
+                        &nbsp;&nbsp;email: <span class="string">"ashwinpremani1@gmail.com"</span>,<br>
+                        &nbsp;&nbsp;phone: <span class="string">"(898) 306-8464"</span>,<br>
+                        &nbsp;&nbsp;linkedin: <span class="string">"linkedin.com/in/ashwin-premani"</span>,<br>
+                        &nbsp;&nbsp;github: <span class="string">"github.com/Ashwin-premani"</span>,<br>
+                        &nbsp;&nbsp;location: <span class="string">"Mumbai, IN"</span>,<br>
+                        &nbsp;&nbsp;availability: <span class="string">"Open to opportunities"</span><br>
+                        };
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button class="btn-primary" onclick="openEmail()">
+                            Initialize Connection
+                        </button>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 30px; flex-wrap: wrap;">
+                        <a href="https://linkedin.com/in/ashwin-premani" target="_blank" style="color: #00d4aa; text-decoration: none; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#00d4aa'">
+                            📊 LinkedIn
+                        </a>
+                        <a href="https://github.com/Ashwin-premani" target="_blank" style="color: #00d4aa; text-decoration: none; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#00d4aa'">
+                            💻 GitHub
+                        </a>
+                        <a href="mailto:ashwinpremani1@gmail.com" style="color: #00d4aa; text-decoration: none; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#00d4aa'">
+                            📧 Email
+                        </a>
+                        <a href="tel:(898)306-8464" style="color: #00d4aa; text-decoration: none; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#00d4aa'">
+                            📱 Call
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Matrix background animation
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        const matrixArray = matrix.split("");
+
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px courier';
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        // Smooth scrolling navigation
+        function scrollToSection(index) {
+            const sections = document.querySelectorAll('.section, .hero');
+            sections[index].scrollIntoView({ behavior: 'smooth' });
+            
+            // Update active nav dot
+            document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Update nav dots on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section, .hero');
+            const navDots = document.querySelectorAll('.nav-dot');
+            
+            let currentSection = 0;
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2) {
+                    currentSection = index;
+                }
+            });
+            
+            navDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSection);
+            });
+        });
+
+        // Email function
+        function openEmail() {
+            window.location.href = 'mailto:ashwinpremani1@gmail.com?subject=Let\'s Connect!&body=Hi Ashwin,%0D%0A%0D%0AI found your portfolio and would love to connect!';
+        }
+
+        // Typing animation for terminal
+        window.addEventListener('load', () => {
+            const terminal = document.getElementById('terminal-text');
+            const originalContent = terminal.innerHTML;
+            terminal.innerHTML = '';
+            
+            let index = 0;
+            function typeWriter() {
+                if (index < originalContent.length) {
+                    terminal.innerHTML = originalContent.slice(0, index);
+                    index++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    terminal.innerHTML = originalContent;
+                }
+            }
+            
+            setTimeout(typeWriter, 1000);
+        });
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and skill categories
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.card, .skill-category, .project-card');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s ease-out';
+                observer.observe(el);
+            });
+        });
+
+        // Add hover effects to project cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-10px) rotateX(5deg)';
+                    card.style.boxShadow = '0 20px 40px rgba(0, 255, 65, 0.2)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) rotateX(0deg)';
+                    card.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
