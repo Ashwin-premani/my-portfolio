@@ -19,6 +19,78 @@
             scroll-behavior: smooth;
         }
 
+        /* --- New Top Navigation Bar Styles --- */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1001;
+            border-bottom: 1px solid #222;
+            transition: top 0.3s;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        .nav-logo:hover {
+            color: #00ff41;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            padding-bottom: 5px;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #00ff41;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #00ff41;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        /* --- End of New Styles --- */
+
+
         .matrix-bg {
             position: fixed;
             top: 0;
@@ -30,14 +102,13 @@
         }
 
         .hero {
+            padding-top: 80px; /* Added padding to prevent overlap with new nav bar */
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
-            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
-            padding: 20px;
         }
 
         .hero-header {
@@ -120,8 +191,8 @@
         }
 
         .section {
+            padding-top: 80px; /* Added padding to prevent overlap */
             min-height: 100vh;
-            padding: 80px 20px;
             position: relative;
         }
 
@@ -226,7 +297,8 @@
         }
 
         .project-card {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            /* Updated background color to match skill category */
+            background: rgba(20, 20, 30, 0.8); 
             border: 1px solid #333;
             border-radius: 15px;
             padding: 25px;
@@ -367,6 +439,8 @@
         .string { color: #ffd700; }
 
         @media (max-width: 768px) {
+            .main-nav { display: none; } /* Hide nav links on smaller screens */
+            .nav-container { justify-content: center; } /* Center logo when links are hidden */
             .glitch { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
             .floating-nav { display: none; }
@@ -377,6 +451,22 @@
 </head>
 <body>
     <canvas class="matrix-bg" id="matrix"></canvas>
+
+    <header class="top-nav">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">AshwinPremani.dev</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                    <li><a href="#experience" class="nav-link">Experience</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
     
     <nav class="floating-nav">
         <div class="nav-dot active" data-section="Home" onclick="scrollToSection(0)"></div>
@@ -426,9 +516,6 @@
                 <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
                     Currently mastering the art of deep learning, where I'm exploring cutting-edge architectures like Vision Transformers, CNNs, and Recurrent Neural Networks. While I've built production-ready ML pipelines and achieved 90%+ accuracy on multiple classification tasks, I'm continuously expanding my neural network expertise to tackle more complex challenges in computer vision and time-series prediction.
                 </p>
-                <p style="font-size: 18px; line-height: 1.8;">
-                    From fraud detection systems processing millions of transactions to healthcare prediction platforms saving lives, I specialize in end-to-end ML solutions—from data preprocessing and feature engineering to model deployment and performance optimization. My backend skills complement my ML expertise, enabling me to build scalable systems that serve intelligent predictions at scale.
-                </p>
                 <div class="code-snippet" style="margin-top: 30px;">
                     <span class="keyword">class</span> <span class="highlight">AshwinPremani</span>:<br>
                     &nbsp;&nbsp;<span class="keyword">def</span> <span class="highlight">__init__</span>(self):<br>
@@ -445,7 +532,7 @@
 
     <section class="section" id="skills">
         <div class="container">
-            <h2 class="section-title">ML.Pipeline()</h2>
+            <h2 class="section-title">Tech_Stack.load()</h2>
             <div class="skills-grid">
                 <div class="skill-category">
                     <h3 style="color: #00ff41; margin-bottom: 15px;">🧠 Machine Learning Core</h3>
@@ -493,6 +580,18 @@
                     <div class="skill-bar"><div class="skill-fill" style="width: 65%"></div></div>
                     <div>Model Monitoring</div>
                     <div class="skill-bar"><div class="skill-fill" style="width: 70%"></div></div>
+                </div>
+
+                <div class="skill-category">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">💻 Backend & Databases</h3>
+                    <div>Node.js & Express.js</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                    <div>Databases (PostgreSQL, MongoDB)</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 88%"></div></div>
+                    <div>API Architecture</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 90%"></div></div>
+                    <div>Authentication (JWT)</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
                 </div>
             </div>
         </div>
@@ -557,6 +656,18 @@
                         &nbsp;&nbsp;<span class="keyword">return</span> fraud_model.predict_proba(features)
                     </div>
                     <p style="margin-top: 15px;"><strong>Tech:</strong> Python, Scikit-learn, Feature Engineering</p>
+                </div>
+                
+                <div class="project-card">
+                    <h3 style="color: #a476ff; margin-bottom: 15px;">💡 AI-Powered Learning Platform (StudyTree)</h3>
+                    <p style="margin-bottom: 15px;">Designed a MERN stack educational platform featuring AI-generated roadmaps and personalized learning paths. Integrated OpenAI's API for dynamic, user-tailored content generation.</p>
+                    <div class="code-snippet">
+                        <span class="keyword">async function</span> <span class="highlight">getRoadmap</span>(topic) {<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> response = <span class="keyword">await</span> openai.complete({ ... });<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> response.data.choices[0].text;<br>
+                        }
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Tech:</strong> MERN Stack, OpenAI API, Redux, Node.js</p>
                 </div>
             </div>
         </div>
@@ -654,9 +765,6 @@
                         <a href="mailto:ashwinpremani1@gmail.com" style="color: #00d4aa; text-decoration: none; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#00d4aa'">
                             📧 Email
                         </a>
-                        <a href="tel:(898)306-8464" style="color: #00d4aa; text-decoration: none; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#00d4aa'">
-                            📱 Call
-                        </a>
                     </div>
                 </div>
             </div>
@@ -702,32 +810,35 @@
 
         setInterval(drawMatrix, 35);
 
-        // Smooth scrolling navigation
+        // Smooth scrolling for side navigation
         function scrollToSection(index) {
             const sections = document.querySelectorAll('.section, .hero');
             sections[index].scrollIntoView({ behavior: 'smooth' });
-            
-            // Update active nav dot
-            document.querySelectorAll('.nav-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
         }
 
-        // Update nav dots on scroll
+        // Update nav dots and top nav links on scroll
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('.section, .hero');
             const navDots = document.querySelectorAll('.nav-dot');
+            const navLinks = document.querySelectorAll('.nav-link'); // Get top nav links
             
             let currentSection = 0;
             sections.forEach((section, index) => {
                 const rect = section.getBoundingClientRect();
-                if (rect.top <= window.innerHeight / 2) {
+                // Check if section is in the middle of the viewport
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
                     currentSection = index;
                 }
             });
             
+            // Update side nav dots
             navDots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSection);
+            });
+
+            // Update top nav links
+            navLinks.forEach((link, index) => {
+                link.classList.toggle('active', index === currentSection);
             });
         });
 
